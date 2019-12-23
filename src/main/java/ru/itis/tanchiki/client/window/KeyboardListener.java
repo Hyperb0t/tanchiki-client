@@ -29,25 +29,31 @@ public class KeyboardListener implements KeyListener {
             Tank ta = client.getGameState().getField().getTankByPlayer(client.getPlayer());
             float oldX = ta.getX();
             float oldY = ta.getY();
-            client.getGameState().getField().getFloorCells()[Math.round(oldX)][Math.round(oldY)].setEntity(null);
             Direction direction = null;
-
+            float newX = oldX;
+            float newY = oldY;
             if (e.getKeyCode() == KeyEvent.VK_W) {
-                ta.setCoordinates(ta.getX(), ta.getY() - client.getGameRules().getTankSpeed());
+                newY = ta.getY() - client.getGameRules().getTankSpeed();
                 direction = Direction.UP;
             } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                ta.setCoordinates(ta.getX(), ta.getY() + client.getGameRules().getTankSpeed());
+                newY = ta.getY() + client.getGameRules().getTankSpeed();
                 direction = Direction.DOWN;
             } else if (e.getKeyCode() == KeyEvent.VK_A) {
-                ta.setCoordinates(ta.getX() - client.getGameRules().getTankSpeed(), ta.getY());
+                newX = ta.getX() - client.getGameRules().getTankSpeed();
                 direction = Direction.LEFT;
             } else if (e.getKeyCode() == KeyEvent.VK_D) {
-                ta.setCoordinates(ta.getX() + client.getGameRules().getTankSpeed(), ta.getY());
+                newX = ta.getX() + client.getGameRules().getTankSpeed();
                 direction = Direction.RIGHT;
             }
-            if(collisionManager.canMove(client.getGameState(), ta, direction, client.getGameRules().getTankSpeed())) {
+            ta.setDirection(direction);
+            boolean canMove = collisionManager.canMove(client.getGameState(), ta, direction, client.getGameRules().getTankSpeed());
+            if(!canMove) {
+                return;
+            }
+            if(canMove) {
+                ta.setCoordinates(newX, newY);
                 client.getNetworkSender().sendTankMoved(oldX, oldY, ta.getX(), ta.getY(), direction);
-                ta.setDirection(direction);
+                client.getGameState().getField().getFloorCells()[Math.round(oldX)][Math.round(oldY)].setEntity(null);
                 client.getGameState().getField().getFloorCells()
                         [Math.round(ta.getX())][Math.round(ta.getY())].setEntity(ta);
             }
