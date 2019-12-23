@@ -46,8 +46,6 @@ public class NetworkListener implements Runnable{
             moveTankInModel(client.getGameState(), packet);
         }
         else if(packet.getEventType().equals(EventType.PLAYER_LEFT)) {
-            client.getGameState().getField().getEntities().stream().forEach(en->{if(en instanceof Tank)
-                System.out.println(en);});
             for(int i = 0; i < client.getGameState().getPlayers().size(); i++) {
                 if(client.getGameState().getPlayers().get(i).getName().equals(packet.getFromContent(0).getPlayerName())) {
                     client.getGameState().getField().getEntities().remove
@@ -65,9 +63,6 @@ public class NetworkListener implements Runnable{
                             .setEntity(null);
                 }
             }
-            System.out.println("after removing");
-            client.getGameState().getField().getEntities().stream().forEach(en->{if(en instanceof Tank)
-                System.out.println(en);});
         }
     }
 
