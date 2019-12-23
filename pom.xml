@@ -25,6 +25,16 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ru.kpfu.itis.rodsher</groupId>
+      <artifactId>tanchiki-protocol</artifactId>
+      <version>0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>ru.kpfu.itis.rodsher</groupId>
+      <artifactId>tanchiki-models</artifactId>
+      <version>0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
